@@ -1,0 +1,64 @@
+<meta charset="utf-8">
+<title>myLib demo</title>
+<script src="http://cdn.staticfile.org/vue/2.6.4/vue.js"></script>
+<script src="./myLib.umd.js"></script>
+
+<link rel="stylesheet" href="./myLib.css">
+
+
+<div id="app">
+  <demo ref="pie"></demo>
+</div>
+
+<script>
+  new Vue({
+    components: {
+      demo: myLib
+    },
+    mounted() {
+      this.$nextTick(() => {
+        this.$refs['pie'].setOptions({
+          name: "视频总数",
+          colors: ["#00C170", "red", "#3474FF", "#FF9800"],//#FF4447
+          img: './imgs/car-blue.svg',
+          fontColor: 'rgba(76,80,89,1)',
+          title: {
+            fontSize: 40,
+          },
+          subTitle: {
+            fontSize: 30,
+          },
+          radius: {
+            inner: 180,
+            outer: 180,
+            lineWidth: 14
+          },
+          guidLine: {
+            fontSize: 20,
+            text: {
+              color: 'red'
+            }
+          },
+          data: [
+            {
+              name: "在线",
+              value: 50000 //Math.floor(Math.random() * 100)
+            },
+            {
+              name: "B",
+              value: 456 //Math.floor(Math.random() * 100)
+            },
+            {
+              name: "C",
+              value: 123 //Math.floor(Math.random() * 100)
+            },
+            {
+              name: "离线",
+              value: 50000 //Math.floor(Math.random() * 100)
+            }
+          ]
+        });
+      })
+    },
+  }).$mount('#app')
+</script>

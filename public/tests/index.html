@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pie</title>
+    <meta charset="utf-8">
+    <style>
+      body {
+        background: rgba(30, 30, 30);
+      }
+    </style>
+    <script src="../pie.js"></script>
+    <script>
+      var pie;
+      window.onload = function(){
+        pie = new Pie;
+        document.body.appendChild(pie.el);
+        pie.data(1,2);
+        pie.animate();
+        
+
+        document.querySelector('#btn').onclick = function () {
+          pie.data(Math.random()* 100, Math.random()* 100);
+          pie.animate();
+         
+        }
+      };
+    </script>
+    <style>
+      body { padding: 50px; }
+    </style>
+  </head>
+  <body>
+    <button id="btn">更新</button>
+  </body>
+</html>

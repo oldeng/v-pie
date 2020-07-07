@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script>
+    function getEventPosition(ev) {
+        var x, y;
+        if (ev.layerX || ev.layerX == 0) {
+            x = ev.layerX;
+            y = ev.layerY;
+        } else {
+            x = ev.offsetX;
+            y = ev.offsetY;
+        }
+        console.log("x:" + x + ",y:" + y)
+        return { x: x, y: y }
+    }
+    function init() {
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        if (canvas.width < window.innerWidth) {
+            canvas.width = window.innerWidth;
+        }
+
+        //计算扇形的垂直距离y    直角三角形，角度为30度，半径为100，
+        var y = 100 * Math.cos(Math.PI / 6)
+        var x = 100 * Math.sin(Math.PI / 6)
+        var xLocation = parseFloat(100) + parseFloat(x);
+        var yLocation = parseFloat(100) + parseFloat(y);
+
+        //划辅助线（扇形左下角 A区域）
+        ctx.beginPath();
+        ctx.moveTo(100, 100);
+        ctx.lineTo(100, yLocation);
+        ctx.moveTo(100, yLocation);
+        ctx.lineTo(xLocation, yLocation);
+        //设置绘制颜色
+        ctx.fillStyle = "blue";
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fill();
+
+        //划辅助线（扇形右下角 B区域）
+        ctx.beginPath();
+        ctx.moveTo(200, 100);
+        ctx.lineTo(200, yLocation);
+        ctx.moveTo(200, yLocation);
+        ctx.lineTo(xLocation, yLocation);
+        //设置绘制颜色
+        ctx.fillStyle = "blue";
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fill();
+
+        canvas.addEventListener("click", function (e) {
+            var pos = getEventPosition(e);
+            var count = 0;
+            //思路，4个步骤判断是否点击了扇形区域    
+            //1：水平方向上:值  100<x<200
+            if (parseFloat(100) < parseFloat(pos.x) && parseFloat(pos.x) < parseFloat(200)) {
+                count++;
+            }
+            //2:斜方向：    值  100<y<yLocation
+            if (parseFloat(100) < parseFloat(pos.y) && parseFloat(pos.y) < parseFloat(yLocation)) {
+                count++;
+            }
+            //3：右下角点击处的坐标到圆心的距离是否大于半径(计算如图（B）区域)
+            if (Math.pow((parseFloat(pos.x) - 100), 2) + Math.pow((parseFloat(pos.y) - 100), 2) < 10000) {
+                count++;
+            }
+            //4：计算左下角斜边长是否在等比例上(计算如图（A）区域)
+            if ((xLocation - 100) / (pos.x - 100) < (yLocation - 100) / (pos.y - 100)) {
+                count++;
+            }
+
+            if (count == 4) {
+                alert("您点击了扇形！")
+            }
+        })
+        //绘制整个圆
+        ctx.beginPath();
+        ctx.moveTo(100, 100);
+        ctx.arc(100, 100, 100, 0 * Math.PI / 180, 360 * Math.PI / 180);
+        ctx.fillStyle = 'white';
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fill();
+
+        //绘制60度的扇形，顺时针绘制
+        ctx.beginPath();
+        ctx.moveTo(100, 100);
+        ctx.arc(100, 100, 100, 0 * Math.PI / 180, 60 * Math.PI / 180);
+        ctx.closePath();
+        ctx.fillStyle = 'yellow';
+        ctx.stroke();
+        ctx.fill();
+
+
+        ctx.fillStyle = "red";
+        //设置或返回文本内容的当前字体属性
+        ctx.font = "20px '微软雅黑'";
+        //设置或返回文本内容的当前对齐方式
+        ctx.textAlign = "left";
+        //shadowBlur:模式级数
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 5;
+        ctx.shadowOffsetY = 5;
+        ctx.shadowColor = "black";
+        //fillText("要添加的文字",x0坐标，y0坐标)
+        //在画布上绘制“被填充的”文本
+        ctx.fillText("A", parseFloat(100) + parseFloat(10), yLocation - 15);
+        //在画布上绘制“被填充的”文本
+        ctx.fillText("B", parseFloat(xLocation) + parseFloat(35), yLocation - 15);
+    }
+</script>
+
+<body onload="init()">
+    <canvas id="canvas" width="500" height="500"></canvas>
+</body>
+
+</html>
