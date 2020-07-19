@@ -123,7 +123,7 @@ export default class Pie {
         }
     }
     //计算data中每一项value的总和
-    computeSum () {
+    computeSum() {
         if (!!!this.options.data) {
             throw Error('options data is not defined');
         }
@@ -173,7 +173,7 @@ export default class Pie {
                 // this.ctx.arc(x, y, r, start, end);
                 this._r = r + 10;
                 this.key = key;
-            } 
+            }
             this.ctx.strokeStyle = color;
             this.ctx.stroke();
         } else {//实心饼状图
@@ -190,11 +190,11 @@ export default class Pie {
                 this.ctx.fill();
                 console.log('鼠标移入');
             } else {
-                
+
             }
-           
+
         }
-        this.ctx.closePath();  
+        this.ctx.closePath();
         this.ctx.restore();
     };
     drawGuidLine(
@@ -265,7 +265,14 @@ export default class Pie {
     drawImg(x, y, src) {
         let img = new Image();
         img.src = src;
-        this.ctx.drawImage(img, x - 11.5, y - 40, 23, 18);
+        let offset = this.options.icon.offset;
+        let width = this.options.icon.width;
+        let height = this.options.icon.height;
+
+        img.onload = function () {
+            this.ctx.drawImage(img, x - offset.left, 
+                y - offset.top, width, height);
+        }.bind(this);
     }
     clearLable() {
         this.ctx.clearRect(-50, -25, 100, 100);
@@ -289,29 +296,30 @@ export default class Pie {
         //清空
         this.clear();
 
+        //绘制图标
+        if (options.icon) {
+            this.drawImg(0, 0, options.icon.url);
+        }
+
         for (let i = 0; i < data.length; i++) {
             // (((map[key] / sum) * Math.PI) / 180) * 360;
-            let offset = (((data[i].value /this.sum) * Math.PI) / 180) * 360;
+            let offset = (((data[i].value / this.sum) * Math.PI) / 180) * 360;
             endAngle = startAngle + offset;
             realEndAngle = endAngle * this.currentAnimationPercent / this.animationPercent;
             //画扇区
             if (this.animation) {
-                this.ring(0, 0,this.r, startAngle, realEndAngle, options.colors[i], type);
+                this.ring(0, 0, this.r, startAngle, realEndAngle, options.colors[i], type);
                 //导引线
                 this.drawGuidLine(0, 0, this.r, startAngle, realEndAngle, options.colors[i], data[i].name, options.guidLine.fontSize, options.guidLine.text.color);
                 startAngle = realEndAngle;
             } else {
-                this.ring(0, 0,this.r, startAngle, endAngle, options.colors[i], type);
+                this.ring(0, 0, this.r, startAngle, endAngle, options.colors[i], type);
                 this.drawGuidLine(0, 0, this.r, startAngle, endAngle, options.colors[i], data[i].name, options.guidLine.fontSize, options.guidLine.text.color);
                 startAngle = endAngle;
             }
         }
         this.drawText(0, -10, options.title.color, options.title.fontSize, options.name);
         this.drawText(0, 50, options.subTitle.color, options.subTitle.fontSize, this.sum.toString().replace(/(?!^)(?=(\d{3})+$)/g, ','));
-         //绘制图标
-        if (options.img) {
-            this.drawImg(0, 0, this.img);
-        }
 
         //开启动画
         if (this.currentAnimationPercent < this.animationPercent && this.animation) {
