@@ -82,33 +82,8 @@ export default {
       this.options4 = JSON.parse(JSON.stringify(options));
       //demo1
       this.options1.icon = undefined;
-      this.$refs["demo1"].setOptions(this.options1);
-      this.options2.radius.inner = 80;
-      this.options2.radius.outer = 100;
-      //demo2
-      this.options2.icon = undefined;
-      this.$refs["demo2"].setOptions(this.options2);
-      //demo3
-      this.options3.radius.inner = 80;
-      this.options3.radius.outer = 100;
-      this.options3.icon.width = 40;
-      this.options3.icon.height = 40;
-      this.options3.icon.offset = {
-        left: 15,
-        top: 80
-      };
-      this.$refs["demo3"].setOptions(this.options3);
+      this.$refs["demo1"].setOptions(options);
 
-      //demo4
-      this.options4.colors = ['red', 'blue', 'red', 'blue'];
-      this.options4.radius.inner = 60;
-      this.options4.radius.outer = 80;
-      this.options4.icon = undefined;
-      this.options4.data.splice(2);
-      this.options4.data[0].value = 100;
-      this.options4.data[1].value = 300;
-      this.options4.data[0].gradient = ['red', 'blue'];
-      this.$refs["demo4"].setOptions(this.options4);
     });
   },
   components: {

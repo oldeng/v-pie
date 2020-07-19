@@ -1,44 +1,25 @@
 export default {
-    animation: false,
-    name: "总数",
-    colors: ["#00C170", "red", "#3474FF", "#FF9800"],//#FF4447
-    img: './imgs/car-blue.svg',
-    fontColor: 'rgba(76,80,89,1)',
-    title: {
-        fontSize: 40,
-        color: '#ffffff'
+    name: 'circle',
+    animationCurve: 'easeOutBack',
+    hover: true,
+    drag: true,
+    // shape: {
+    //   rx: w / 2,
+    //   ry: h / 2,
+    //   r: 50
+    // },
+    style: {
+      fill: '#9ce5f4',
+      shadowBlur: 0,
+      shadowColor: '#66eece',
+      hoverCursor: 'pointer'
     },
-    subTitle: {
-        fontSize: 30,
-        color: '#3C76E5'
+    mouseEnter (e) {
+      this.animation('shape', { r: 70 }, true)
+      this.animation('style', { shadowBlur: 20 })
     },
-    radius: {
-        inner: 100,
-        outer: 100,
-        lineWidth: 14
-    },
-    guidLine: {
-        fontSize: 20,
-        text: {
-            color:'#ffffff'
-        }
-    },
-    data: [
-        {
-            name: "汉字A",
-            value: 100 //Math.floor(Math.random() * 100)
-        },
-        {
-            name: "汉字B",
-            value: 100 //Math.floor(Math.random() * 100)
-        },
-        {
-            name: "汉字C",
-            value: 100 //Math.floor(Math.random() * 100)
-        },
-        {
-            name: "汉字D",
-            value: 100 //Math.floor(Math.random() * 100)
-        }
-    ]
-}
+    mouseOuter (e) {
+      this.animation('shape', { r: 50 }, true)
+      this.animation('style', { shadowBlur: 0 })
+    }
+  }

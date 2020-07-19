@@ -35,19 +35,19 @@ export default {
     data: [
         {
             name: "汉字A",
-            value: 100 //Math.floor(Math.random() * 100)
+            value: 1 //Math.floor(Math.random() * 100)
         },
         {
             name: "汉字B",
-            value: 100 //Math.floor(Math.random() * 100)
+            value: 1 //Math.floor(Math.random() * 100)
         },
         {
             name: "汉字C",
-            value: 100 //Math.floor(Math.random() * 100)
+            value: 3 //Math.floor(Math.random() * 100)
         },
         {
             name: "汉字D",
-            value: 100 //Math.floor(Math.random() * 100)
+            value: 4 //Math.floor(Math.random() * 100)
         }
     ]
 }
