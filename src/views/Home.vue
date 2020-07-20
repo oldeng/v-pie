@@ -50,28 +50,28 @@ export default {
       ];
       this.$refs["demo1"].setOptions(this.options1);
 
-      this.options2.data = [
-        {
-          name: "汉字A",
-          value: Math.floor(Math.random() * 100)
-        },
-        {
-          name: "汉字B",
-          value: Math.floor(Math.random() * 100)
-        },
-        {
-          name: "汉字C",
-          value: Math.floor(Math.random() * 100)
-        },
-        {
-          name: "汉字D",
-          value: Math.floor(Math.random() * 100)
-        }
-      ];
-      //demo2
-      this.$refs["demo2"].setOptions(this.options2);
-      //demo3
-      this.$refs["demo3"].setOptions(this.options3);
+      // this.options2.data = [
+      //   {
+      //     name: "汉字A",
+      //     value: Math.floor(Math.random() * 100)
+      //   },
+      //   {
+      //     name: "汉字B",
+      //     value: Math.floor(Math.random() * 100)
+      //   },
+      //   {
+      //     name: "汉字C",
+      //     value: Math.floor(Math.random() * 100)
+      //   },
+      //   {
+      //     name: "汉字D",
+      //     value: Math.floor(Math.random() * 100)
+      //   }
+      // ];
+      // //demo2
+      // this.$refs["demo2"].setOptions(this.options2);
+      // //demo3
+      // this.$refs["demo3"].setOptions(this.options3);
     }
   },
   mounted() {

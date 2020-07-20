@@ -21,19 +21,18 @@ function getPixelRatio(context) {
     return (window.devicePixelRatio || 1) / backingStore;
 };
 
-function deepMerge (target, merged) {
+function deepMerge(target, merged) {
     for (var key in merged) {
-      target[key] = target[key] && typeof target[key] === 'object' ?
-        deepMerge(target[key], merged[key]) : target[key] = merged[key]
+        target[key] = target[key] && typeof target[key] === 'object' ?
+            deepMerge(target[key], merged[key]) : target[key] = merged[key]
     }
-  
+
     return target
-  }
+}
 
 import CRender from '@jiaminghi/c-render';
 import SectorConfig from './config/sector';
-
-console.log(SectorConfig);
+import LableLineConfig from './config/line';
 
 export default class Pie {
     constructor() {
@@ -87,24 +86,26 @@ export default class Pie {
         return pie;
     };
 
-    calcSum () {
+    calcSum() {
         this.sum = 0;
         this.options.data.forEach(item => {
             this.sum += item.value;
         });
         console.log(this.sum);
     }
-    calcSectors () {
+    calcSectors() {
         this.sectors = [];
         let start = 0;
         let end = 0;
         this.options.data.forEach((item, index) => {
-            index === 0 ? start = 0 : start = this.sectors[index-1].end;
+            index === 0 ? start = 0 : start = this.sectors[index - 1].end;
             end = start + 2 * Math.PI * item.value / this.sum;
-            
+
 
             this.sectors.push({
+                name: item.name,
                 start: start,
+                mid: (end - start) / 2,
                 end: end
             })
         });
@@ -113,51 +114,80 @@ export default class Pie {
 
     setOptions(options) {
         this.options = JSON.parse(JSON.stringify(options));
+        //扇区配置
         this.sectorConfig = JSON.parse(JSON.stringify(SectorConfig));
-        //合并options和sectorconfig
+        //导引线配置
+        this.lableLineConfig = JSON.parse(JSON.stringify(LableLineConfig));
+
         this.calcSum();
         this.calcSectors();
-        this.sectors.forEach((sector, index) => {
-            let config = deepMerge(SectorConfig, {
-                style: {
-                    fill: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`,
-                    shadowBlur: 0,
-                    rotate: 0,
-                    shadowColor: '#66eece',
-                    hoverCursor: 'pointer'
-                },
-                shape: {
-                    rx: this.width / 2,
-                    ry: this.height / 2,
-                    r: 80,
-                    startAngle: sector.start,
-                    endAngle: sector.end
-                  },
-            })
-            console.log('config',config);
-            this.render.add(config);
-        });
-        
+
+        if (!this.graphics) {
+            //合并options和sectorconfig
+            this.sectors.forEach((sector, index) => {
+                // let config = deepMerge(SectorConfig, {
+                //     style: {
+                //         fill: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`,
+                //         shadowBlur: 0,
+                //         rotate: 0,
+                //         shadowColor: '#66eece',
+                //         hoverCursor: 'pointer'
+                //     },
+                //     shape: {
+                //         rx: this.width / 2,
+                //         ry: this.height / 2,
+                //         r: 80,
+                //         startAngle: sector.start,
+                //         endAngle: sector.end
+                //     },
+                // })
+                // console.log('config', config);
+                // if (!this.graphics) {
+                //     this.graphics = [];
+                // }
+                // this.graphics.push(config);
+                // this.render.add(config);
+                this.drawLableLine(sector);
+            });
+            this.render.launchAnimation();
+            //
+        } else {
+            this.sectors.forEach((sector, index) => {
+                console.log('this--->', this);
+                let graphic = this.render.graphs[index];
+                if (graphic) {
+                    graphic.animation('shape', {
+                        startAngle: sector.start,
+                        endAngle: sector.end
+                    })
+                }
+            });
+        }
     }
 
+    drawLableLine(sector) {
+            let x0 = this.width / 2;
+            let y0 = this.height / 2;
+            let x1 = Math.floor(x0 + 80 * Math.cos(sector.mid));
+            let y1 = Math.floor(y0 + 80 * Math.sin(sector.mid));
 
+            let x2 = Math.floor(x0 + 150 * Math.cos(sector.mid));
+            let y2 = Math.floor(y0 + 150 * Math.sin(sector.mid));
+            let lableLine = JSON.parse(JSON.stringify(LableLineConfig));
+            console.log(x1, y1, '-->', x2, y2);
+            let config = deepMerge(lableLine, {
+                shape: {
+                    points: [
+                        [x1, y1],
+                        [x2, y2]
+                    ],
+                    style: {
+                        stroke: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`
+                    }
+                }
+            });
+            // this.graphics.push(config);
+            this.render.add(config);
 
-
-
-
-
-
-
-    clear() {
-        this.ctx.clearRect(
-            -this.width / 2,
-            -this.height / 2,
-            this.width,
-            this.height
-        );
-    };
-    //画图
-    render(options, type) {
-
-    };
+    }
 }
