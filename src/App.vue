@@ -2,6 +2,7 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">预览</router-link> |
+      <router-link to="/experiment">实验</router-link> |
       <router-link to="/about">学习</router-link> |
       <router-link to="/docs">文档</router-link>
     </div>
@@ -11,7 +12,9 @@
 
 <style lang="less">
 body {
-  background: rgba(30, 30, 30);
+  // background: rgba(30, 30, 30);
+     background: -webkit-radial-gradient(center ellipse, #0a2e38 0%, #000000 70%);
+     background: radial-gradient(ellipse at center, #0a2e38 0%, #000000 70%);
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

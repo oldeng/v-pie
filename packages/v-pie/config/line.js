@@ -6,8 +6,9 @@ export default {
     shape: {
         points: []
     },
+    index:-1,
     style: {
-      stroke: 'red',
+      stroke: '',
       shadowBlur: 0,
       lineWidth: 2,
       shadowColor: '#66eece',

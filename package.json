@@ -1,6 +1,6 @@
 {
   "name": "@oldeng/v-pie",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "dist/v-pie.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -14,7 +14,7 @@
     "build:umd": "rollup --config build/rollup.config.umd.js"
   },
   "dependencies": {
-    "@jiaminghi/c-render": "^0.4.3",
+    "@jiaminghi/color": "^0.1.1",
     "core-js": "^3.6.4",
     "vant": "^2.8.6",
     "vue": "^2.6.11",

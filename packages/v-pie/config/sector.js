@@ -3,6 +3,7 @@ export default {
   animationCurve: 'easeOutBack',
   hover: true,
   drag: true,
+  index: 1,
   shape: {
     rx: 120,
     ry: 120,

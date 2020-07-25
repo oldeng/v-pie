@@ -33,6 +33,7 @@ function deepMerge(target, merged) {
 import CRender from '@jiaminghi/c-render';
 import SectorConfig from './config/sector';
 import LableLineConfig from './config/line';
+import TextConfig from './config/text';
 
 export default class Pie {
     constructor() {
@@ -60,8 +61,6 @@ export default class Pie {
         this.animationPercent = 100;
         //当前动画百分比
         this.currentAnimationPercent = 0;
-
-
     }
 
     _init(dom) {
@@ -78,11 +77,15 @@ export default class Pie {
         dom.appendChild(canvas);
         this.ctx = canvas.getContext("2d");
         this.render = new CRender(canvas);
+
+        //道引线点位
+        this.points = [];
     }
 
     static init(dom) {
         let pie = new Pie();
         pie._init(dom);
+
         return pie;
     };
 
@@ -101,11 +104,10 @@ export default class Pie {
             index === 0 ? start = 0 : start = this.sectors[index - 1].end;
             end = start + 2 * Math.PI * item.value / this.sum;
 
-
             this.sectors.push({
                 name: item.name,
                 start: start,
-                mid: (end - start) / 2,
+                mid: (start + end) / 2,
                 end: end
             })
         });
@@ -121,73 +123,110 @@ export default class Pie {
 
         this.calcSum();
         this.calcSectors();
-
-        if (!this.graphics) {
+        this.render.delAllGraph();
+        // if (!this.graphics) {
             //合并options和sectorconfig
             this.sectors.forEach((sector, index) => {
-                // let config = deepMerge(SectorConfig, {
-                //     style: {
-                //         fill: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`,
-                //         shadowBlur: 0,
-                //         rotate: 0,
-                //         shadowColor: '#66eece',
-                //         hoverCursor: 'pointer'
-                //     },
-                //     shape: {
-                //         rx: this.width / 2,
-                //         ry: this.height / 2,
-                //         r: 80,
-                //         startAngle: sector.start,
-                //         endAngle: sector.end
-                //     },
-                // })
-                // console.log('config', config);
-                // if (!this.graphics) {
-                //     this.graphics = [];
-                // }
-                // this.graphics.push(config);
-                // this.render.add(config);
-                this.drawLableLine(sector);
-            });
-            this.render.launchAnimation();
-            //
-        } else {
-            this.sectors.forEach((sector, index) => {
-                console.log('this--->', this);
-                let graphic = this.render.graphs[index];
-                if (graphic) {
-                    graphic.animation('shape', {
+                let config = deepMerge(SectorConfig, {
+                    style: {
+                        fill: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`,
+                        shadowBlur: 0,
+                        rotate: 0,
+                        shadowColor: '#66eece',
+                        hoverCursor: 'pointer'
+                    },
+                    shape: {
+                        rx: this.width / 2,
+                        ry: this.height / 2,
+                        r: 80,
                         startAngle: sector.start,
                         endAngle: sector.end
-                    })
+                    },
+                })
+                console.log('config', config);
+                if (!this.graphics) {
+                    this.graphics = [];
                 }
+                this.graphics.push(config);
+                this.drawLableLine(sector, index);
+                this.render.add(config);
+
             });
-        }
+            // this.render.launchAnimation();
+            //
+        // } else {
+        //     this.sectors.forEach((sector, index) => {
+        //         console.log('this--->', this);
+        //         let graphic = this.render.graphs[index];
+        //         if (graphic) {
+        //             graphic.animation('shape', {
+        //                 startAngle: sector.start,
+        //                 endAngle: sector.end
+        //             })
+        //         }
+        //     });
+        // }
     }
 
-    drawLableLine(sector) {
-            let x0 = this.width / 2;
-            let y0 = this.height / 2;
-            let x1 = Math.floor(x0 + 80 * Math.cos(sector.mid));
-            let y1 = Math.floor(y0 + 80 * Math.sin(sector.mid));
+    drawLableLine(sector , index) {
+        let x0 = this.width / 2;
+        let y0 = this.height / 2;
+        let x1 = Math.floor(x0 + 80 * Math.cos(sector.mid));
+        let y1 = Math.floor(y0 + 80 * Math.sin(sector.mid));
 
-            let x2 = Math.floor(x0 + 150 * Math.cos(sector.mid));
-            let y2 = Math.floor(y0 + 150 * Math.sin(sector.mid));
-            let lableLine = JSON.parse(JSON.stringify(LableLineConfig));
-            console.log(x1, y1, '-->', x2, y2);
-            let config = deepMerge(lableLine, {
-                shape: {
-                    points: [
-                        [x1, y1],
-                        [x2, y2]
-                    ],
+        let x2 = Math.floor(x0 + 100 * Math.cos(sector.mid));
+        let y2 = Math.floor(y0 + 100 * Math.sin(sector.mid));
+        let lableLine = JSON.parse(JSON.stringify(LableLineConfig));
+
+        let x3 = x0;
+        let y3 = y0;
+        if (x1 > x0 || x2 > x0) {
+            x3 = x2 + 15;
+            y3 = y2;
+        } else {
+            x3 = x2 - 15;
+            y3 = y2;
+        }
+        this.points[index] = [
+            [x1, y1],
+            [x2, y2],
+            [x3, y3]
+        ];
+        let lable = JSON.parse(JSON.stringify(lableLine))
+        let config = deepMerge(lable, {
+            shape: {
+                points: [
+                    [x1, y1],
+                    [x2, y2],
+                    [x3, y3]
+                ],
+            },
+            style: {
+                stroke: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`
+            }
+        });
+        // this.graphics.push(config);
+        this.render.add(config);
+        this.drawText(sector.name);
+    }
+
+    drawText (text) {
+
+        this.points.forEach(points => {
+            if (points[2]) {
+                let config = deepMerge(TextConfig, {
+                    shape: {
+                        content: text,
+                        position: points[2]
+                    },
                     style: {
-                        stroke: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`
+                        textAlign: points[2][0] > this.width / 2 ? 'left' : 'right'
                     }
-                }
-            });
-            // this.graphics.push(config);
-            this.render.add(config);
-
+                })
+                this.render.add(config);
+            } else {
+                throw Error('lable potin empty');
+            }
+        })
     }
 }

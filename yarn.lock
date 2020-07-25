@@ -789,7 +789,7 @@
     "@jiaminghi/color" "*"
     "@jiaminghi/transition" "*"
 
-"@jiaminghi/color@*":
+"@jiaminghi/color@*", "@jiaminghi/color@^0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@jiaminghi/color/-/color-0.1.1.tgz#bddf9012dfce6982d3829a983ffeb91ee9dda7b6"
   integrity sha512-M09+Sb5HGqVim0zo+nG5gU1v+6gXT8ptr0BZR6dMGt83XmCJgnZtO8s7llTW4hLFFFM5co6geZvTekqLpSPAAQ==
