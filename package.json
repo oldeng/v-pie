@@ -1,7 +1,11 @@
 {
   "name": "@oldeng/v-pie",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "dist/v-pie.min.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:oldeng/v-pie.git"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --report",

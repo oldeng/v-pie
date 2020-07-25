@@ -82,3 +82,8 @@ export default {
 };
 ```
 
+#Github
+https://github.com/oldeng/v-pie/tree/Crender
+
+#Npm
+
